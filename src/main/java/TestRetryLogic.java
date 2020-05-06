@@ -1,8 +1,11 @@
+import io.restassured.RestAssured;
+import io.restassured.http.Method;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.testng.Assert;
-import org.testng.annotations.Listeners;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import skipDefects.Issue;
-import skipDefects.MethodIssueStatusListener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,13 +14,72 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.Socket;
 import java.net.URL;
+import java.time.Duration;
+import java.time.Instant;
 
 
 public class TestRetryLogic {
 
-    @Test(enabled = false)
-    public void testAssertionFailure() {
-        Assert.assertFalse(true);
+    @Test(enabled = true)
+    public void testAssertionFailureAndCaptureTime() {
+
+        Instant start = Instant.now();
+        RestAssured.baseURI = "https://restcountries.eu/rest/v2/name/1";
+        System.out.println("URI " + RestAssured.baseURI);
+        //Define the specification of request. Server is specified by baseURI above.
+        RequestSpecification httpRequest = RestAssured.given();
+        //Makes calls to the server using Method type.
+        Response response = httpRequest.request(Method.GET);
+        // CODE HERE
+        Instant finish = Instant.now();
+        long timeElapsed = Duration.between(start, finish).toSeconds();
+        System.out.println("Time elapsed in seconds-- " + timeElapsed);
+        //Checks the Status Code
+        int statusCode = response.getStatusCode();
+        System.out.println("Response is " + response.getBody().asString());
+        Assert.assertEquals(statusCode, 200);
+
+        // https://javarevisited.blogspot.com/2012/04/how-to-measure-elapsed-execution-time.html#ixzz6LYrIYUiT
+
+
+    }
+
+    @Test(dataProvider = "employeeData", enabled = false)
+    public void testEmployeeDataProvider(String employeeId) {
+        RestAssured.baseURI = "http://dummy.restapiexample.com/api/v1/employee/" + employeeId;
+        System.out.println("URI " + RestAssured.baseURI);
+
+        //Define the specification of request. Server is specified by baseURI above.
+        RequestSpecification httpRequest = RestAssured.given();
+
+        //Makes calls to the server using Method type.
+        Response response = httpRequest.request(Method.GET);
+
+        //Checks the Status Code
+        int statusCode = response.getStatusCode();
+        System.out.println("Response is " + response.getBody().asString());
+        Assert.assertEquals(statusCode, 200);
+
+
+    }
+
+
+    @Test(dataProvider = "countryData", enabled = false)
+    public void testCountryDataProvider(String countryName) {
+        RestAssured.baseURI = "https://restcountries.eu/rest/v2/name/" + countryName;
+        System.out.println("URI " + RestAssured.baseURI);
+
+        //Define the specification of request. Server is specified by baseURI above.
+        RequestSpecification httpRequest = RestAssured.given();
+
+        //Makes calls to the server using Method type.
+        Response response = httpRequest.request(Method.GET);
+
+        //Checks the Status Code
+        int statusCode = response.getStatusCode();
+        System.out.println("Response is " + response.getBody().asString());
+        Assert.assertEquals(statusCode, 200);
+
 
     }
 
@@ -30,15 +92,15 @@ public class TestRetryLogic {
             e.printStackTrace();
         }
     }
+
     @Issue("JRA-9")
     @Test(enabled = false)
-    public void testDefect()
-    {
+    public void testDefect() {
 
     }
 
     @Issue("JRA-9")
-    @Test(enabled = true)
+    @Test(enabled = false)
     public void unknownHostException() throws IOException {
         String hostname = "http://locaihost";
         URL url = new URL(hostname);
@@ -48,7 +110,7 @@ public class TestRetryLogic {
 
     }
 
-   @Test(enabled = false)
+    @Test(enabled = false)
     public void authenticationFailureException() throws IOException {
         String hostname = "http://dummy.restapiexample.com/api/v1/employee/1900000";
         URL url = new URL(hostname);
@@ -132,4 +194,29 @@ public class TestRetryLogic {
             }
         }
     }
+
+    @DataProvider(name = "employeeData")
+    public Object[][] getData() {
+        return new Object[][]
+                {
+                        {"1"},
+                        {"20002"},
+                        {"2"}
+                };
+
+    }
+
+    @DataProvider(name = "countryData")
+    public Object[][] getCountryData() {
+        return new Object[][]
+                {
+                        {"1"},
+                        {"Colombia"},
+                        {"Estonia"}
+
+                };
+
+    }
+
 }
+

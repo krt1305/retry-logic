@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Testing Google Apps">
+    <listeners>
+        <listener class-name="AnnotationTransformerLatest"></listener>
+     <!--   <listener class-name="myLogic.JiraStatusListener"></listener> -->
+       <!-- <listener class-name="customLogic.FinalRetryLogic.RetryLogic"></listener>-->
+    </listeners>
+    <test name="Regression">
+        <classes>
+          <!--  <class name="myLogic.TestRetryLogic"></class>-->
+            <class name="TestRetryLogic"></class>
+        </classes>
+    </test> <!-- Test -->
+</suite> <!-- Suite -->

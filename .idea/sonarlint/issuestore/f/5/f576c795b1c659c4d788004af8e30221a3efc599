@@ -1,0 +1,4 @@
+
+_squid:S1126"AReplace this if-then-else statement by a single return statement.(‰«±±8¢÷–Ä.
+Qsquid:S1068"3Remove this unused "abortConditions" private field.(¿°öü8òœîÄ.
+~squid:S00120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(çÎşÈüÿÿÿÿ8¦ü×Ä.

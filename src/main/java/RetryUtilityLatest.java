@@ -5,14 +5,12 @@ import skipDefects.IssueTrackerUtil;
 
 import java.net.ConnectException;
 import java.net.UnknownHostException;
-import java.sql.SQLOutput;
 
-public class RetryUtilityLatest implements IRetryAnalyzer , IInvokedMethodListener {
+public class RetryUtilityLatest implements IRetryAnalyzer, IInvokedMethodListener {
 
     int retryAttempt = 0;
     int retryLimit = 4;
 
-    @Override
     public boolean retry(ITestResult result) {
 
          /*if(retryAttempt < retryLimit)
@@ -20,7 +18,7 @@ public class RetryUtilityLatest implements IRetryAnalyzer , IInvokedMethodListen
                 retryAttempt++;
                 return true;
             }*/
-        System.out.println("Host is "+ result.getHost());
+        System.out.println("Host is " + result.getHost());
         //isOpenDefect(result);
         System.out.println("In retry utilty latest ");
         Throwable cause = result.getThrowable();
@@ -44,7 +42,7 @@ public class RetryUtilityLatest implements IRetryAnalyzer , IInvokedMethodListen
         return false;
     }
 
-    @Override
+
     public void beforeInvocation(IInvokedMethod invokedMethod, ITestResult result) {
         System.out.println("Checking if test is a defect");
 

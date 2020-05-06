@@ -1,0 +1,26 @@
+
+# Details of a exception
+---
+exceptionType: connectException
+delayConfigurations:
+  delayType: fixed
+  maxAttemps: 2
+  delayMin: 0
+  delayMax: 0
+  jitter: 0
+  fixedDelay: 1
+
+
+
+---
+fixedDelay:
+  sleepTime:3
+
+randomDelay:
+  delayMin:1
+  delayMax:3
+
+randomDelayJitter:
+  delayMin:1
+  delayMax:3
+  jitter:3

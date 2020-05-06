@@ -1,0 +1,39 @@
+
+@squid:S1172"+Remove this unused method parameter "host".(±ƒªú
+M
+squid:S106"9Replace this use of System.out or System.err by a logger.(ñÀîº
+›squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(÷“ãÚüÿÿÿÿ
+Ksquid:S1481"1Remove this unused "objectMapper" local variable.(¡ôó‰ùÿÿÿÿ
+L
+squid:S106"9Replace this use of System.out or System.err by a logger.(ÃÂ¾%
+R
+squid:S106"9Replace this use of System.out or System.err by a logger.(İ¥úøüÿÿÿÿ
+R
+squid:S106"9Replace this use of System.out or System.err by a logger.(“‘“ıÿÿÿÿ
+R
+squid:S106"9Replace this use of System.out or System.err by a logger.(á…Šÿÿÿÿÿ
+R
+squid:S106"9Replace this use of System.out or System.err by a logger.(´Óò÷øÿÿÿÿ
+R
+squid:S106"9Replace this use of System.out or System.err by a logger.(Â×·×şÿÿÿÿ
+Xsquid:S1854">Remove this useless assignment to local variable "statusCode".(µ„Üøÿÿÿÿ
+Zsquid:S1854"@Remove this useless assignment to local variable "respAsString".(Äºûÿÿÿÿ
+Tsquid:S1161":Add the "@Override" annotation above this method signature(¦ØØæúÿÿÿÿ
+R
+squid:S106"9Replace this use of System.out or System.err by a logger.(µÎÚĞùÿÿÿÿ
+Isquid:S1481"/Remove this unused "statusCode" local variable.(µ„Üøÿÿÿÿ
+Tsquid:S1161":Add the "@Override" annotation above this method signature(÷“ãÚüÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(–•‰éıÿÿÿÿ
+Osquid:S1161":Add the "@Override" annotation above this method signature(–Æ„ì
+R
+squid:S106"9Replace this use of System.out or System.err by a logger.(Ä”ÅÔÿÿÿÿÿ
+[squid:S1126"AReplace this if-then-else statement by a single return statement.(È‘Õöşÿÿÿÿ
+Ksquid:S1481"1Remove this unused "respAsString" local variable.(Äºûÿÿÿÿ
+Zsquid:S1854"@Remove this useless assignment to local variable "objectMapper".(¡ôó‰ùÿÿÿÿ
+L
+squid:S106"9Replace this use of System.out or System.err by a logger.(ÃÂ¾%
+Msquid:S1854"8Remove this useless assignment to local variable "host".(ĞÍß‚
+R
+squid:S106"9Replace this use of System.out or System.err by a logger.(²Êæïüÿÿÿÿ
+>squid:S1481")Remove this unused "host" local variable.(ĞÍß‚
+Osquid:S1161":Add the "@Override" annotation above this method signature(÷İæÀ

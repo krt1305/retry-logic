@@ -1,0 +1,23 @@
+
+T
+squid:S106"9Replace this use of System.out or System.err by a logger.(ñÀîº8ÎäÚ¡.
+Y
+squid:S106"9Replace this use of System.out or System.err by a logger.(»Éæ¥üÿÿÿÿ8ÎäÚ¡.
+Y
+squid:S106"9Replace this use of System.out or System.err by a logger.(´Óò÷øÿÿÿÿ8ÎäÚ¡.
+]squid:UselessImportCheck"/Remove this unused import 'java.sql.SQLOutput'.(ê¤òÃùÿÿÿÿ8ÎäÚ¡.
+Y
+squid:S106"9Replace this use of System.out or System.err by a logger.(“‘“ıÿÿÿÿ8ÎäÚ¡.
+gsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(¥´ºÔ8ÎäÚ¡.
+T
+squid:S106"9Replace this use of System.out or System.err by a logger.(ÕÎõı8ÎäÚ¡.
+lsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(óéãåøÿÿÿÿ8ÎäÚ¡.
+Y
+squid:S106"9Replace this use of System.out or System.err by a logger.(İ¥úøüÿÿÿÿ8ÎäÚ¡.
+Y
+squid:S106"9Replace this use of System.out or System.err by a logger.(Â×·×şÿÿÿÿ8ÎäÚ¡.
+T
+squid:S106"9Replace this use of System.out or System.err by a logger.(ËÍÏ•8ÎäÚ¡.
+[squid:S1161":Add the "@Override" annotation above this method signature(ªÄßÕúÿÿÿÿ8çÛ¡.
+T
+squid:S106"9Replace this use of System.out or System.err by a logger.(±ÓÍ8ÎäÚ¡.

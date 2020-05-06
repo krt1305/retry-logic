@@ -1,8 +1,11 @@
-import myLogic.stopLogic.StopStrategies;
-import myLogic.waitLogic.WaitStrategies;
-import org.testng.*;
+import org.testng.IInvokedMethod;
+import org.testng.IInvokedMethodListener;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
+import stopLogic.StopStrategies;
+import waitStrategy.WaitStrategies;
 
-public interface GenericRetryAnalyzer extends IInvokedMethodListener  {
+public interface GenericRetryAnalyzer extends IInvokedMethodListener {
 
     boolean retry(ITestResult result, StopStrategies stopStrategies, WaitStrategies waitStrategies);
 
