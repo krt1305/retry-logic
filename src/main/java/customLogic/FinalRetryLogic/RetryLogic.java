@@ -2,35 +2,39 @@ package customLogic.FinalRetryLogic;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import customLogic.ExceptionList;
 import customLogic.RetryConfig;
+import customLogic.RetryConfigList;
 import customLogic.RetryPolicy;
 import customLogic.delays.DelayType;
-import customLogic.slackNotification.SlackMessage;
 import customLogic.slackNotification.SlackUtil;
-import ninjaCore.StopStrategies;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.testng.IRetryAnalyzer;
 import org.testng.ITestResult;
-import waitStrategy.WaitStrategies;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
 
 public class RetryLogic implements IRetryAnalyzer {
 
     int retryAttempt = 0;
     int retryLimit = 2;
-    WaitStrategies waitStrategies;
-    StopStrategies stopStrategies;
     int noOfFailedAttempts = 0;
     static List<String> abortConditions = new ArrayList<String>();
     RetryPolicy retryPolicy = new RetryPolicy();
+    static RetryConfigList retryConfigList = null;
     DelayType delay;
     static RetryConfig retryConfig = null;
-    SlackUtil slackUtil=new SlackUtil();
+    SlackUtil slackUtil = new SlackUtil();
+    List<ExceptionList> exceptions;
+    boolean exceptionFoundInConfig = false;
+    int maxAttempts;
+    String delayType;
+    long fixedDelay, delayMin, delayMax, jitter;
 
     static {
         abortConditions.add("IllegalStateException");
@@ -39,7 +43,7 @@ public class RetryLogic implements IRetryAnalyzer {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
 
-            retryConfig = mapper.readValue(new File("src/main/java/customLogic/resources/retryConfiguration.yaml"), RetryConfig.class);
+            retryConfigList = mapper.readValue(new File("src/main/java/customLogic/resources/retryConfigurationList.yaml"), RetryConfigList.class);
             System.out.println(ReflectionToStringBuilder.toString(retryConfig, ToStringStyle.MULTI_LINE_STYLE));
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,40 +52,83 @@ public class RetryLogic implements IRetryAnalyzer {
     }
 
     public boolean retry(ITestResult result) {
-        Throwable cause = result.getThrowable();
-        if (retryPolicy.isAbortable(cause)) {
-            System.out.println("Aborting-----");
-            return false;
+        if (result.getThrowable() != null) {
+            Throwable cause = result.getThrowable();
+            System.out.println("Cause is " + cause);
+            if (retryPolicy.isAbortable(cause)) {
+                System.out.println("Aborting Retry -----");
+                return false;
 
-        } else {
-            if (retryAttempt < retryLimit) {
-                //delay=new DelayType()
-                System.out.println("Delay type " + retryConfig.getDelayConfigurations().get("delayType"));
-                retryPolicy.withRetryPolicy(cause,
-                        (int) retryConfig.getDelayConfigurations().get("maxAttemps"),
-                        retryConfig.getDelayConfigurations().get("delayType").toString(),
-                        Long.parseLong(retryConfig.getDelayConfigurations().get("fixedDelay").toString()),
-                        Long.parseLong(retryConfig.getDelayConfigurations().get("delayMin").toString()),
-                        Long.parseLong(retryConfig.getDelayConfigurations().get("delayMax").toString()),
-                        Long.parseLong(retryConfig.getDelayConfigurations().get("jitter").toString()));
-                System.out.println("Retry attempt ---" + retryAttempt);
-                retryAttempt++;
-                noOfFailedAttempts++;
-                return true;
+            } else {
+                exceptions = retryConfigList.getExceptions();
+                System.out.println("Total number of exceptions in configuration " + exceptions.size());
+                for (int i = 0; i <= exceptions.size() - 1; i++) {
+                    System.out.println("Exception type is " + exceptions.get(i).getExceptionType());
+                    if (cause.toString().contains(exceptions.get(i).getExceptionType())) {
+                        maxAttempts = (int) exceptions.get(i).getDelayConfigurations().get("maxAttemps");
+                        delayType = exceptions.get(i).getDelayConfigurations().get("delayType").toString();
+                        fixedDelay = Long.parseLong(exceptions.get(i).getDelayConfigurations().get("fixedDelay").toString());
+                        delayMin = Long.parseLong(exceptions.get(i).getDelayConfigurations().get("delayMin").toString());
+                        delayMax = Long.parseLong(exceptions.get(i).getDelayConfigurations().get("delayMax").toString());
+                        jitter = Long.parseLong(exceptions.get(i).getDelayConfigurations().get("delayMax").toString());
+                        System.out.println("Max attempts " + (int) exceptions.get(i).getDelayConfigurations().get("maxAttemps"));
+                        System.out.println("fixed delay " + (int) exceptions.get(i).getDelayConfigurations().get("fixedDelay"));
+                        System.out.println("found exception in config ...Breaking for loop ----");
+                        exceptionFoundInConfig = true;
+                        break;
+
+                    }
+                }
+                if (exceptionFoundInConfig == true) {
+                    if (retryAttempt < maxAttempts) {
+                        System.out.println("Executing retry policy");
+                  /*  if (retryConfig.getDelayConfigurations().get("delayType").toString().equalsIgnoreCase("fixed")) {
+                        Timer timer = new Timer();
+                        timer.schedule(new TimerTaskDemo(), 8000);
+                        //   final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+                        //  executorService.scheduleAtFixedRate(RetryLogic::executeWithFixedWait, 0, 180, TimeUnit.SECONDS);
+
+                    }*/
+                        //retry policy
+                        retryPolicy.withRetryPolicy(cause,
+                                maxAttempts, delayType, fixedDelay, delayMin, delayMax, jitter);
+                        System.out.println("Retry attempt ---" + retryAttempt);
+                        retryAttempt++;
+                        noOfFailedAttempts++;
+                        return true;
+
+
+                    }
+                } else {
+                    if (retryAttempt < retryLimit) {
+                        System.out.println("Exception not found in configuration");
+                        System.out.println("Picking default Retry attempt ---" + retryAttempt);
+                        retryAttempt++;
+                        noOfFailedAttempts++;
+                        return true;
+                    }
+
+                }
 
 
             }
 
+        } else {
+            if (retryAttempt < retryLimit) {
+                System.out.println("Exception not found in configuration");
+                System.out.println("Picking default Retry attempt ---" + retryAttempt);
+                retryAttempt++;
+                noOfFailedAttempts++;
+                return true;
+            }
         }
+
         return false;
-    }
-
-    public static void executeWithRetryPolicy() {
 
     }
 
-    public void sendSlackNotification()
-    {
+
+    public void sendSlackNotification() {
        /* SlackMessage slackMessage = SlackMessage
                 .channel("the-channel-name")
                 .username("user1")
@@ -91,4 +138,16 @@ public class RetryLogic implements IRetryAnalyzer {
         SlackUtil.sendMessage(slackMessage);*/
 
     }
+
+    public class TimerTaskDemo extends TimerTask {
+
+        @Override
+        public void run() {
+            System.out.println("****************************************************");
+            System.out.println(System.currentTimeMillis());
+            System.out.println("working at fixed rate delay");
+        }
+    }
+
+
 }

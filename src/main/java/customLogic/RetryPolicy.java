@@ -34,8 +34,8 @@ public class RetryPolicy {
 
         if (t instanceof UnknownHostException)
             return true;
-        else if (t instanceof IOException)
-            return true;
+       /* else if (t instanceof IOException)
+            return true;*/
         else if (t instanceof IllegalStateException)
             return true;
 

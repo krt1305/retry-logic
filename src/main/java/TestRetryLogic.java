@@ -12,6 +12,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import skipDefects.Issue;
 
+import javax.net.ssl.SSLProtocolException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,6 +20,7 @@ import java.io.PrintWriter;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
 import java.time.Duration;
@@ -29,21 +31,16 @@ public class TestRetryLogic {
 
     String urlSlackWebHook = "https://hooks.slack.com/services/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";
 
-    @Test(enabled = true, dataProvider = "countryData")
+    @Test(enabled = false, dataProvider = "countryData")
     public void testAssertionFailureAndCaptureTime(String countryName) {
 
         Instant start = Instant.now();
         RestAssured.baseURI = "https://restcountries.eu/rest/v2/name/" + countryName;
-        System.out.println("URI " + RestAssured.baseURI);
-        //Define the specification of request. Server is specified by baseURI above.
         RequestSpecification httpRequest = RestAssured.given();
-        //Makes calls to the server using Method type.
         Response response = httpRequest.request(Method.GET);
-        // CODE HERE
         Instant finish = Instant.now();
         long timeElapsed = Duration.between(start, finish).toSeconds();
         System.out.println("Time elapsed in seconds-- " + timeElapsed);
-        //Checks the Status Code
         int statusCode = response.getStatusCode();
         System.out.println("Response is " + response.getBody().asString());
         Assert.assertEquals(statusCode, 200);
@@ -56,15 +53,8 @@ public class TestRetryLogic {
     @Test(dataProvider = "employeeData", enabled = false)
     public void testEmployeeDataProvider(String employeeId) {
         RestAssured.baseURI = "http://dummy.restapiexample.com/api/v1/employee/" + employeeId;
-        System.out.println("URI " + RestAssured.baseURI);
-
-        //Define the specification of request. Server is specified by baseURI above.
         RequestSpecification httpRequest = RestAssured.given();
-
-        //Makes calls to the server using Method type.
         Response response = httpRequest.request(Method.GET);
-
-        //Checks the Status Code
         int statusCode = response.getStatusCode();
         System.out.println("Response is " + response.getBody().asString());
         Assert.assertEquals(statusCode, 200);
@@ -72,19 +62,11 @@ public class TestRetryLogic {
 
     }
 
-
     @Test(dataProvider = "countryData", enabled = false)
     public void testCountryDataProvider(String countryName) {
         RestAssured.baseURI = "https://restcountries.eu/rest/v2/name/" + countryName;
-        System.out.println("URI " + RestAssured.baseURI);
-
-        //Define the specification of request. Server is specified by baseURI above.
         RequestSpecification httpRequest = RestAssured.given();
-
-        //Makes calls to the server using Method type.
         Response response = httpRequest.request(Method.GET);
-
-        //Checks the Status Code
         int statusCode = response.getStatusCode();
         System.out.println("Response is " + response.getBody().asString());
         Assert.assertEquals(statusCode, 200);
@@ -93,13 +75,18 @@ public class TestRetryLogic {
     }
 
     @Test(enabled = false)
-    public void testSocketTimeOutException() {
+    public void testSocketTimeOutException() throws Exception {
         String myUrl = "https://google.com/";
-        try {
-            String results = crunchifyCallURL(myUrl);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String results = null;
+        results = crunchifyCallURL(myUrl);
+        System.out.println("Results is " + results);
+    }
+
+    @Test(enabled = true) // no config found case- default logic
+    public void testSSLProtocolException() throws SSLProtocolException {
+
+        throw new SSLProtocolException("SSL protocol Exception");
+
     }
 
     @Issue("JRA-9")
@@ -120,13 +107,35 @@ public class TestRetryLogic {
     }
 
     @Test(enabled = false)
-    public void authenticationFailureException() throws IOException {
+    public void authenticationFailureException() {
         String hostname = "http://dummy.restapiexample.com/api/v1/employee/1900000";
-        URL url = new URL(hostname);
+        URL url = null;
+        try {
+            url = new URL(hostname);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         HttpURLConnection con = null;
-        con = (HttpURLConnection) url.openConnection();
-        con.getResponseCode();
-        System.out.println("Response code is " + con.getResponseCode());
+        try {
+            con = (HttpURLConnection) url.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            con.getResponseCode();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            System.out.println("Response code is " + con.getResponseCode());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            Assert.assertEquals(con.getResponseCode(), 200);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }
@@ -158,6 +167,18 @@ public class TestRetryLogic {
         executor.
                 getWithRetry(() -> new Socket("localhost", 3333)).
                 thenAccept(socket -> System.out.println("Connected! " + socket));*/
+    }
+
+
+    @Test(enabled = false)
+    public void testAPIGatewayException() {
+        //https://httpstat.us/504?sleep=5000
+        RestAssured.baseURI = "https://httpstat.us/504?sleep=5000";
+        RequestSpecification httpRequest = RestAssured.given();
+        Response response = httpRequest.request(Method.GET);
+        int statusCode = response.getStatusCode();
+        System.out.println("Response is " + response.getBody().asString());
+        Assert.assertEquals(statusCode, 200);
     }
 
     private String crunchifyCallURL(String crunchifyURL) throws Exception {
@@ -253,7 +274,7 @@ public class TestRetryLogic {
             String errorCode = response.getError(); // e.g., "invalid_auth", "channel_not_found"
         }*/
 
-     //https://app.slack.com/client/T0130GYN79R/C012YV1U2G5
+        //https://app.slack.com/client/T0130GYN79R/C012YV1U2G5
         String message = "sample message";
         Payload payload = Payload.builder().
                 channel("#general").username("Bot").iconEmoji(":rocket").text(message).build();

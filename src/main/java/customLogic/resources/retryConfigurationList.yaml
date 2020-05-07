@@ -1,0 +1,21 @@
+# Details of a exception
+---
+
+exceptions:
+- exceptionType: connectException
+  delayConfigurations:
+    delayType: fixed
+    maxAttemps: 2
+    delayMin: 0
+    delayMax: 0
+    jitter: 0
+    fixedDelay: 1
+
+- exceptionType: AssertionError
+  delayConfigurations:
+    delayType: fixed
+    maxAttemps: 4
+    delayMin: 0
+    delayMax: 0
+    jitter: 0
+    fixedDelay: 10
