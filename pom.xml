@@ -92,9 +92,6 @@
         </dependency>
 
 
-
-
-
         <!-- https://mvnrepository.com/artifact/com.google.common/google-collect -->
         <!--   <dependency>
                <groupId>com.google.common</groupId>
@@ -126,6 +123,22 @@
             <version>2.9.8</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.4</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.6</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -133,6 +146,27 @@
             <version>5.7.0-M1</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.palantir.roboslack/roboslack-api -->
+        <dependency>
+            <groupId>com.palantir.roboslack</groupId>
+            <artifactId>roboslack-api</artifactId>
+            <version>1.3.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.slack.api/slack-api-model -->
+      <!--  <dependency>
+            <groupId>com.slack.api</groupId>
+            <artifactId>slack-api-model</artifactId>
+            <version>1.0.6</version>
+        </dependency>-->
+
+        <dependency>
+            <groupId>com.github.seratch</groupId>
+            <artifactId>jslack</artifactId>
+            <version>1.5.6</version>
+        </dependency>
+
 
     </dependencies>
 

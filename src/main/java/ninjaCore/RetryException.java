@@ -1,11 +1,11 @@
 package ninjaCore;
 
-import org.apache.http.annotation.Immutable;
+//import org.apache.http.annotation.Immutable;
 import com.google.common.base.Preconditions;
 
 import javax.annotation.Nonnull;
 
-@Immutable
+//@Immutable
 public final class RetryException extends Exception {
 
     private final int numberOfFailedAttempts;

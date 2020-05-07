@@ -1,0 +1,16 @@
+
+ %squid:RedundantThrowsDeclarationCheck"jRemove the declaration of thrown exception 'java.lang.IllegalStateException' which is a runtime exception.(êöĞ8ß’Ê.
+ %squid:RedundantThrowsDeclarationCheck"jRemove the declaration of thrown exception 'java.lang.IllegalStateException' which is a runtime exception.(ıÈıö8ß’Ê.
+gsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(¨ˆ–‹8ß’Ê.
+fsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(¡îõ8ß’Ê.
+gsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(´ŞÔÏ8ß’Ê.
+lsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Ÿ•‰¦øÿÿÿÿ8ß’Ê.
+S
+squid:S106"9Replace this use of System.out or System.err by a logger.(ÃşöO8ß’Ê.
+Jsquid:S2140")Use "java.util.Random.nextInt()" instead.(¤®¡Òşÿÿÿÿ8ß’Ê.
+bsquid:S2142"FEither re-interrupt this method or rethrow the "InterruptedException".(ä ¹€8ß’Ê.
+bsquid:S2142"FEither re-interrupt this method or rethrow the "InterruptedException".(ä ¹€8ß’Ê.
+|squid:S00120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(úİ†¾ûÿÿÿÿ8ß’Ê.
+Dsquid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8ß’Ê.
+Dsquid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8ß’Ê.
+9squid:S1700"Rename field "delayType"(Áó¸×şÿÿÿÿ8ß’Ê.

@@ -1,8 +1,13 @@
+
+import com.github.seratch.jslack.Slack;
+import com.github.seratch.jslack.api.webhook.Payload;
+import com.github.seratch.jslack.api.webhook.WebhookResponse;
 import io.restassured.RestAssured;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.testng.Assert;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import skipDefects.Issue;
@@ -11,6 +16,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
 import java.net.HttpURLConnection;
 import java.net.Socket;
 import java.net.URL;
@@ -20,11 +27,13 @@ import java.time.Instant;
 
 public class TestRetryLogic {
 
-    @Test(enabled = true)
-    public void testAssertionFailureAndCaptureTime() {
+    String urlSlackWebHook = "https://hooks.slack.com/services/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";
+
+    @Test(enabled = true, dataProvider = "countryData")
+    public void testAssertionFailureAndCaptureTime(String countryName) {
 
         Instant start = Instant.now();
-        RestAssured.baseURI = "https://restcountries.eu/rest/v2/name/1";
+        RestAssured.baseURI = "https://restcountries.eu/rest/v2/name/" + countryName;
         System.out.println("URI " + RestAssured.baseURI);
         //Define the specification of request. Server is specified by baseURI above.
         RequestSpecification httpRequest = RestAssured.given();
@@ -215,6 +224,49 @@ public class TestRetryLogic {
                         {"Estonia"}
 
                 };
+
+    }
+
+    @AfterSuite
+    public void detectDeadlock() {
+        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+        long[] threadIds = threadMXBean.findDeadlockedThreads();
+        boolean deadlock = threadIds != null && threadIds.length > 0;
+        System.out.println("Deadlocks found " + deadlock);
+
+      /*  WebHookToken token = WebHookToken.fromString("<token>");
+        MessageRequest message = MessageRequest.builder()
+                .text("Hello, Slack!")
+                .username("roboslack")
+                .channel("#your-channel")
+                .build();
+        ResponseCode response =
+                SlackWebHookService.with(token).sendMessage(message);*/
+
+     /*   Slack slack = Slack.getInstance();
+        ChatPostMessageResponse response = slack.methods(token).chatPostMessage(req -> req
+                .channel("C1234567")
+                .text("Write one, post anywhere"));
+        if (response.isOk()) {
+            MessageChangedEvent.Message postedMessage = response.getMessage();
+        } else {
+            String errorCode = response.getError(); // e.g., "invalid_auth", "channel_not_found"
+        }*/
+
+     //https://app.slack.com/client/T0130GYN79R/C012YV1U2G5
+        String message = "sample message";
+        Payload payload = Payload.builder().
+                channel("#general").username("Bot").iconEmoji(":rocket").text(message).build();
+        WebhookResponse webhookResponse = null;
+        try {
+            webhookResponse = Slack.getInstance().send(urlSlackWebHook, payload);
+            System.out.println("Slack code ->" + webhookResponse.getCode());
+            System.out.println("Slack body ->" + webhookResponse.getBody());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
     }
 

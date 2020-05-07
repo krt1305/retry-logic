@@ -1,11 +1,14 @@
 package customLogic;
 
+import customLogic.FinalRetryLogic.RetryLogic;
 import customLogic.delays.DelayType;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class RetryPolicy {
@@ -48,6 +51,8 @@ public class RetryPolicy {
         Assert.notNull(delayMin, "delayMin cannot be null");
         Assert.notNull(delayMax, "delayMax cannot be null");
         Assert.notNull(jitter, "jitter cannot be null");
+      //   ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+       // executorService.scheduleWithFixedDelay(RetryLogic::method1, 0, 1, TimeUnit.SECONDS);
 
         delayType = new DelayType();
         switch (inputDelayType) {

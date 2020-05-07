@@ -1,14 +1,2 @@
 
-wsquid:S00120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(úÝ†¾ûÿÿÿÿ
-¢%squid:RedundantThrowsDeclarationCheck "jRemove the declaration of thrown exception 'java.lang.IllegalStateException' which is a runtime exception.(êöŽÐ8È–œÇž.
-¢%squid:RedundantThrowsDeclarationCheckI"jRemove the declaration of thrown exception 'java.lang.IllegalStateException' which is a runtime exception.(ýÈýö8È–œÇž.
-hsquid:CommentedOutCodeLine""<This block of commented-out lines of code should be removed.(¡îõ8È–œÇž.
-isquid:CommentedOutCodeLine5"<This block of commented-out lines of code should be removed.(´ÞÔÏ8È–œÇž.
-nsquid:CommentedOutCodeLineL"<This block of commented-out lines of code should be removed.(Ÿ•‰¦øÿÿÿÿ8È–œÇž.
-U
-squid:S106K"9Replace this use of System.out or System.err by a logger.(ÃþöO8È–œÇž.
-Lsquid:S2140:")Use "java.util.Random.nextInt()" instead.(¤®¡Òþÿÿÿÿ8È–œÇž.
-dsquid:S2142%"FEither re-interrupt this method or rethrow the "InterruptedException".(ä ¹€8È–œÇž.
-dsquid:S21422"FEither re-interrupt this method or rethrow the "InterruptedException".(ä ¹€8È–œÇž.
-Fsquid:S1148&"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8È–œÇž.
-Fsquid:S11483"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8È–œÇž.
+usquid:S00120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(úÝ†¾ûÿÿÿÿ

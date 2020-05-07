@@ -5,6 +5,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import customLogic.RetryConfig;
 import customLogic.RetryPolicy;
 import customLogic.delays.DelayType;
+import customLogic.slackNotification.SlackMessage;
+import customLogic.slackNotification.SlackUtil;
 import ninjaCore.StopStrategies;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -28,6 +30,7 @@ public class RetryLogic implements IRetryAnalyzer {
     RetryPolicy retryPolicy = new RetryPolicy();
     DelayType delay;
     static RetryConfig retryConfig = null;
+    SlackUtil slackUtil=new SlackUtil();
 
     static {
         abortConditions.add("IllegalStateException");
@@ -66,9 +69,26 @@ public class RetryLogic implements IRetryAnalyzer {
                 noOfFailedAttempts++;
                 return true;
 
+
             }
 
         }
         return false;
+    }
+
+    public static void executeWithRetryPolicy() {
+
+    }
+
+    public void sendSlackNotification()
+    {
+       /* SlackMessage slackMessage = SlackMessage
+                .channel("the-channel-name")
+                .username("user1")
+                .text("just testing")
+                .icon_emoji(":twice:")
+                .build();
+        SlackUtil.sendMessage(slackMessage);*/
+
     }
 }

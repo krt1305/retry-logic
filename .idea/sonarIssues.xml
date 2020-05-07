@@ -113,6 +113,16 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/customLogic/slackNotification/SlackMessage.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/customLogic/slackNotification/SlackUtil.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/customLogic/ymlExample/User.java">
           <value>
             <set />
@@ -124,6 +134,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/customLogic/ymlExample/user.yaml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/ninjaCore/RetryException.java">
           <value>
             <set />
           </value>
