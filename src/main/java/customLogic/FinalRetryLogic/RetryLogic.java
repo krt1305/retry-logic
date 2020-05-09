@@ -21,7 +21,7 @@ import java.util.TimerTask;
 
 public class RetryLogic implements IRetryAnalyzer {
 
-    int retryAttempt = 0;
+    int retryAttempt = 1;
     int retryLimit = 2;
     int noOfFailedAttempts = 0;
     static List<String> abortConditions = new ArrayList<String>();
@@ -32,7 +32,7 @@ public class RetryLogic implements IRetryAnalyzer {
     SlackUtil slackUtil = new SlackUtil();
     List<ExceptionList> exceptions;
     boolean exceptionFoundInConfig = false;
-    int maxAttempts;
+    int maxAttempts, incrementingWaitFactor;
     String delayType;
     long fixedDelay, delayMin, delayMax, jitter;
 
@@ -71,8 +71,9 @@ public class RetryLogic implements IRetryAnalyzer {
                         delayMin = Long.parseLong(exceptions.get(i).getDelayConfigurations().get("delayMin").toString());
                         delayMax = Long.parseLong(exceptions.get(i).getDelayConfigurations().get("delayMax").toString());
                         jitter = Long.parseLong(exceptions.get(i).getDelayConfigurations().get("delayMax").toString());
+                        incrementingWaitFactor = (int) exceptions.get(i).getDelayConfigurations().get("incrementingWaitFactor");
                         System.out.println("Max attempts " + (int) exceptions.get(i).getDelayConfigurations().get("maxAttemps"));
-                        System.out.println("fixed delay " + (int) exceptions.get(i).getDelayConfigurations().get("fixedDelay"));
+                        System.out.println("Delay type " + exceptions.get(i).getDelayConfigurations().get("delayType"));
                         System.out.println("found exception in config ...Breaking for loop ----");
                         exceptionFoundInConfig = true;
                         break;
@@ -82,16 +83,9 @@ public class RetryLogic implements IRetryAnalyzer {
                 if (exceptionFoundInConfig == true) {
                     if (retryAttempt < maxAttempts) {
                         System.out.println("Executing retry policy");
-                  /*  if (retryConfig.getDelayConfigurations().get("delayType").toString().equalsIgnoreCase("fixed")) {
-                        Timer timer = new Timer();
-                        timer.schedule(new TimerTaskDemo(), 8000);
-                        //   final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-                        //  executorService.scheduleAtFixedRate(RetryLogic::executeWithFixedWait, 0, 180, TimeUnit.SECONDS);
-
-                    }*/
                         //retry policy
                         retryPolicy.withRetryPolicy(cause,
-                                maxAttempts, delayType, fixedDelay, delayMin, delayMax, jitter);
+                                maxAttempts, delayType, fixedDelay, delayMin, delayMax, jitter, incrementingWaitFactor, retryAttempt);
                         System.out.println("Retry attempt ---" + retryAttempt);
                         retryAttempt++;
                         noOfFailedAttempts++;

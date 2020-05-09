@@ -53,6 +53,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/customLogic/FinalRetryLogic/RetryCountIfFailed.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/customLogic/FinalRetryLogic/RetryLogic.java">
           <value>
             <set />

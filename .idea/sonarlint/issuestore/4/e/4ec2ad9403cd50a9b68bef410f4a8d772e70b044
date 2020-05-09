@@ -1,2 +1,14 @@
 
-rsquid:S00120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(“”ùÕ
+psquid:S00120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(“”ùÕ
+usquid:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(®¯ÔÜ8…¼âïž.
+lsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(­Ÿ¤´þÿÿÿÿ8…¼âïž.
+T
+squid:S106"9Replace this use of System.out or System.err by a logger.(¯ïéŒ8…¼âïž.
+T
+squid:S106"9Replace this use of System.out or System.err by a logger.(…›óž8…¼âïž.
+T
+squid:S106"9Replace this use of System.out or System.err by a logger.(ü©…´8…¼âïž.
+Y
+squid:S106"9Replace this use of System.out or System.err by a logger.(²Êæïüÿÿÿÿ8…¼âïž.
+squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ŽÁì¦8…¼âïž.
+Dsquid:S1148"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8…¼âïž.

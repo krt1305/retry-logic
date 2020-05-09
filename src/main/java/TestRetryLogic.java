@@ -31,7 +31,7 @@ public class TestRetryLogic {
 
     String urlSlackWebHook = "https://hooks.slack.com/services/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";
 
-    @Test(enabled = false, dataProvider = "countryData")
+    @Test(enabled = true, dataProvider = "countryData")
     public void testAssertionFailureAndCaptureTime(String countryName) {
 
         Instant start = Instant.now();
@@ -82,7 +82,7 @@ public class TestRetryLogic {
         System.out.println("Results is " + results);
     }
 
-    @Test(enabled = true) // no config found case- default logic
+    @Test(enabled = false) // no config found case- default logic
     public void testSSLProtocolException() throws SSLProtocolException {
 
         throw new SSLProtocolException("SSL protocol Exception");

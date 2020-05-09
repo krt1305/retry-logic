@@ -1,0 +1,15 @@
+
+[squid:S1197"8Move the array designator from the variable to the type.(¡þÏÖøÿÿÿÿ8šùÐøž.
+V
+squid:S106"9Replace this use of System.out or System.err by a logger.(Ñßò³8ß‘Éøž.
+dsquid:S2142""FEither re-interrupt this method or rethrow the "InterruptedException".(ä ¹€8×˜äøž.
+[
+squid:S106"9Replace this use of System.out or System.err by a logger.(é£ƒžüÿÿÿÿ8ß‘Éøž.
+dsquid:S2142"FEither re-interrupt this method or rethrow the "InterruptedException".(ä ¹€8¡ÃÐøž.
+Fsquid:S1148#"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8×˜äøž.
+dsquid:S2184"FCast one of the operands of this multiplication operation to a "long".(²ò¥¸8£ÆÑøž.
+wsquid:S00120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(úÝ†¾ûÿÿÿÿ
+Fsquid:S1148"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8¡ÃÐøž.
+V
+squid:S106"9Replace this use of System.out or System.err by a logger.(ùöæ×8šùÐøž.
+nsquid:CommentedOutCodeLine%"<This block of commented-out lines of code should be removed.(ŽÞÙ·þÿÿÿÿ8×˜äøž.

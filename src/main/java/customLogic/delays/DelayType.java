@@ -1,6 +1,5 @@
 package customLogic.delays;
 
-import com.google.common.base.Preconditions;
 import org.testng.Assert;
 
 import javax.annotation.Nonnull;
@@ -81,7 +80,7 @@ public class DelayType {
     public void fixedDelay(long sleepTime, @Nonnull TimeUnit timeUnit) throws IllegalStateException {
         Assert.assertNotNull(timeUnit, "The time unit may not be null");
         // executorService.scheduleAtFixedRate(Retry1 :: ,0,sleepTime, TimeUnit.SECONDS);
-        System.out.println("In fixed delay ..Waiting for "+sleepTime);
+        System.out.println("In fixed delay ..Waiting for " + sleepTime);
         try {
             timeUnit.sleep(sleepTime);
         } catch (InterruptedException e) {
@@ -105,13 +104,28 @@ public class DelayType {
     }
 
     public void randomDelay(long delayMin, long delayMax, TimeUnit timeUnit) throws InterruptedException {
+        Assert.assertNotNull(delayMin, "delayMin may not be null");
+        Assert.assertNotNull(delayMax, "delayMax may not be null");
+        Assert.assertNotNull(timeUnit, "timeUnit may not be null");
+        System.out.println("IN random delay");
+        System.out.println("delayMin --" + delayMin);
+        System.out.println("delayMax --" + delayMax);
+        System.out.println("timeUnit --" + timeUnit);
         long random = (int) (delayMax * Math.random() + delayMin);
+        System.out.println("Random time for sleep is " + random);
         timeUnit.sleep(random);
     }
 
-    public long randomDelay(long delay, long jitter, double random, TimeUnit timeUnit) {
+    public void randomDelay(long delay, long jitter, double random, TimeUnit timeUnit) throws InterruptedException {
+        Assert.assertNotNull(delayMin, "delayMin may not be null");
+        Assert.assertNotNull(delayMax, "delayMax may not be null");
+        Assert.assertNotNull(timeUnit, "timeUnit may not be null");
+        Assert.assertNotNull(jitter, "jitter may not be null");
         double randomAddend = (1 - random * 2) * jitter;
-        return (long) (delay + randomAddend);
+        long totalDelay = (long) (delay + randomAddend);
+        System.out.println("Total Random time for sleep is " + totalDelay);
+        timeUnit.sleep(totalDelay);
+        //  return (long) (delay + randomAddend);
     }
 
     public long randomDelay(long delay, double jitterFactor, double random, TimeUnit timeUnit) {
@@ -120,9 +134,21 @@ public class DelayType {
     }
 
 
-    public void incrementingWait(long sleepTime, @Nonnull TimeUnit timeUnit) throws IllegalStateException {
-        Preconditions.checkNotNull(timeUnit, "The time unit may not be null");
-        System.out.println("In fixedWait ..waiting for " + sleepTime);
+    public void incrementingDelay(long initialSleepTime, int incrementFactor, int attemptNo,
+                                  @Nonnull TimeUnit timeUnit) {
+        System.out.println("In incrementing delay");
+        System.out.println("Attempt no is "+attemptNo);
+        Assert.assertNotNull(initialSleepTime, "initialSleepTime may not be null");
+        Assert.assertNotNull(incrementFactor, "incrementFactor may not be null");
+        Assert.assertNotNull(attemptNo, "attemptNo may not be null");
+        Assert.assertNotNull(timeUnit, "timeUnit may not be null");
+        long result = initialSleepTime + (incrementFactor * (attemptNo - 1));
+        try {
+            timeUnit.sleep(result);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("IN incrementing wait ...sleeping for " + result);
         //return new FixedWaitStrategy(timeUnit.toMillis(sleepTime));
     }
 

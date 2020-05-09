@@ -44,15 +44,15 @@ public class RetryPolicy {
     }
 
 
-    public void withRetryPolicy(Throwable t, int maxRetry, String inputDelayType, long fixedDelay, long delayMin, long delayMax, long jitter) {
+    public void withRetryPolicy(Throwable t, int maxRetry, String inputDelayType,
+                                long fixedDelay, long delayMin, long delayMax,
+                                long jitter,int incrementingWaitFactor,int attemptNo) {
         Assert.notNull(t, "Exception reason cannot be null");
         Assert.notNull(maxRetry, "Max retry cannot be null");
         Assert.notNull(inputDelayType, "DelayType cannot be null");
         Assert.notNull(delayMin, "delayMin cannot be null");
         Assert.notNull(delayMax, "delayMax cannot be null");
         Assert.notNull(jitter, "jitter cannot be null");
-      //   ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-       // executorService.scheduleWithFixedDelay(RetryLogic::method1, 0, 1, TimeUnit.SECONDS);
 
         delayType = new DelayType();
         switch (inputDelayType) {
@@ -68,7 +68,7 @@ public class RetryPolicy {
                 }
                 break;
             case "incrementing":
-
+                delayType.incrementingDelay(fixedDelay, incrementingWaitFactor, attemptNo,TimeUnit.SECONDS);
                 break;
 
 

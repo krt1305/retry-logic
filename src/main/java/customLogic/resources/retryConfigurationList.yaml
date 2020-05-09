@@ -10,12 +10,14 @@ exceptions:
     delayMax: 0
     jitter: 0
     fixedDelay: 1
+    incrementingWaitFactor: 0
 
 - exceptionType: AssertionError
   delayConfigurations:
-    delayType: fixed
+    delayType: incrementing
     maxAttemps: 4
     delayMin: 0
     delayMax: 0
     jitter: 0
-    fixedDelay: 10
+    fixedDelay: 2
+    incrementingWaitFactor: 5
