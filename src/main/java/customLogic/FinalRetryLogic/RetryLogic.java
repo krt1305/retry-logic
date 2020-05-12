@@ -37,9 +37,6 @@ public class RetryLogic implements IRetryAnalyzer {
     long fixedDelay, delayMin, delayMax, jitter;
 
     static {
-        abortConditions.add("IllegalStateException");
-        abortConditions.add("IOException");
-        abortConditions.add("IllegalStateException");
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
 

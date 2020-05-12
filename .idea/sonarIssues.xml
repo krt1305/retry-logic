@@ -43,6 +43,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/customLogic/AbortableExceptions.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/customLogic/ExceptionCriteria.java">
           <value>
             <set />
@@ -148,6 +153,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/customLogic/resources/abortableExceptionsList.yaml">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/customLogic/resources/retryConfiguration.yaml">
           <value>
             <set />
@@ -169,6 +179,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/customLogic/slackNotification/SlackUtil.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/customLogic/testYAML.java">
           <value>
             <set />
           </value>

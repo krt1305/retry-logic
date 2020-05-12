@@ -1,14 +1,13 @@
 package customLogic;
 
-import customLogic.FinalRetryLogic.RetryLogic;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import customLogic.delays.DelayType;
-import org.springframework.util.Assert;
+import org.testng.Assert;
 
+import java.io.File;
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class RetryPolicy {
@@ -26,33 +25,48 @@ public class RetryPolicy {
     private List<String> abortConditions;
     private int maxRetry;
     private DelayType delayType;
+    private String[] abortableExceptionsList;
+    static ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+    static AbortableExceptions abortableExceptions;
 
     public RetryPolicy() {
     }
 
+
     public boolean isAbortable(Throwable t) {
+        try {
+            abortableExceptions = mapper.readValue(new File("src/main/java/customLogic/resources/abortableExceptionsList.yaml"), AbortableExceptions.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //System.out.println(ReflectionToStringBuilder.toString(abortableExceptions, ToStringStyle.MULTI_LINE_STYLE));
 
-        if (t instanceof UnknownHostException)
-            return true;
-       /* else if (t instanceof IOException)
-            return true;*/
-        else if (t instanceof IllegalStateException)
-            return true;
+        abortableExceptionsList = abortableExceptions.getExceptions();
+        for (String s : abortableExceptionsList) {
+            if (t.toString().contains(s)) {
+                return true;
+            }
 
+        }
         return false;
-
     }
 
 
     public void withRetryPolicy(Throwable t, int maxRetry, String inputDelayType,
                                 long fixedDelay, long delayMin, long delayMax,
-                                long jitter,int incrementingWaitFactor,int attemptNo) {
-        Assert.notNull(t, "Exception reason cannot be null");
-        Assert.notNull(maxRetry, "Max retry cannot be null");
-        Assert.notNull(inputDelayType, "DelayType cannot be null");
-        Assert.notNull(delayMin, "delayMin cannot be null");
-        Assert.notNull(delayMax, "delayMax cannot be null");
-        Assert.notNull(jitter, "jitter cannot be null");
+                                long jitter, int incrementingWaitFactor, int attemptNo) {
+        Assert.assertTrue(Integer.class.isInstance(maxRetry));
+        Assert.assertTrue(Long.class.isInstance(fixedDelay));
+        Assert.assertTrue(Long.class.isInstance(delayMin));
+        Assert.assertTrue(Long.class.isInstance(delayMax));
+        Assert.assertTrue(Long.class.isInstance(jitter));
+        Assert.assertTrue(Integer.class.isInstance(incrementingWaitFactor));
+        Assert.assertNotNull(t, "Exception reason cannot be null");
+        Assert.assertNotNull(maxRetry, "Max retry cannot be null");
+        Assert.assertNotNull(inputDelayType, "DelayType cannot be null");
+        Assert.assertNotNull(delayMin, "delayMin cannot be null");
+        Assert.assertNotNull(delayMax, "delayMax cannot be null");
+        Assert.assertNotNull(jitter, "jitter cannot be null");
 
         delayType = new DelayType();
         switch (inputDelayType) {
@@ -68,9 +82,8 @@ public class RetryPolicy {
                 }
                 break;
             case "incrementing":
-                delayType.incrementingDelay(fixedDelay, incrementingWaitFactor, attemptNo,TimeUnit.SECONDS);
+                delayType.incrementingDelay(fixedDelay, incrementingWaitFactor, attemptNo, TimeUnit.SECONDS);
                 break;
-
 
         }
 
