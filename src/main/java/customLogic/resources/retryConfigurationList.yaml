@@ -15,7 +15,7 @@ exceptions:
 - exceptionType: AssertionError
   delayConfigurations:
     delayType: incrementing
-    maxAttemps: 4
+    maxAttemps: 2
     delayMin: 0
     delayMax: 0
     jitter: 0

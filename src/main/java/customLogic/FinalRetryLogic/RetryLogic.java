@@ -8,16 +8,12 @@ import customLogic.RetryConfigList;
 import customLogic.RetryPolicy;
 import customLogic.delays.DelayType;
 import customLogic.slackNotification.SlackUtil;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.testng.IRetryAnalyzer;
 import org.testng.ITestResult;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TimerTask;
+import java.util.*;
 
 public class RetryLogic implements IRetryAnalyzer {
 
@@ -30,18 +26,41 @@ public class RetryLogic implements IRetryAnalyzer {
     DelayType delay;
     static RetryConfig retryConfig = null;
     SlackUtil slackUtil = new SlackUtil();
-    List<ExceptionList> exceptions;
+    static List<ExceptionList> exceptions;
     boolean exceptionFoundInConfig = false;
-    int maxAttempts, incrementingWaitFactor;
-    String delayType;
-    long fixedDelay, delayMin, delayMax, jitter;
+    static int maxAttempts, incrementingWaitFactor;
+    static String delayType;
+    static long fixedDelay, delayMin, delayMax, jitter;
+    static Map<String, Map<String, Object>> delayConfigDetails = new HashMap<String, Map<String, Object>>();
 
     static {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
-
             retryConfigList = mapper.readValue(new File("src/main/java/customLogic/resources/retryConfigurationList.yaml"), RetryConfigList.class);
-            System.out.println(ReflectionToStringBuilder.toString(retryConfig, ToStringStyle.MULTI_LINE_STYLE));
+            exceptions = retryConfigList.getExceptions();
+            for (int i = 0; i <= exceptions.size() - 1; i++) {
+                System.out.println("Exception type is " + exceptions.get(i).getExceptionType());
+                Map<String, Object> delayDetails = new HashMap<>();
+                maxAttempts = (int) exceptions.get(i).getDelayConfigurations().get("maxAttemps");
+                delayType = exceptions.get(i).getDelayConfigurations().get("delayType").toString();
+                fixedDelay = Long.parseLong(exceptions.get(i).getDelayConfigurations().get("fixedDelay").toString());
+                delayMin = Long.parseLong(exceptions.get(i).getDelayConfigurations().get("delayMin").toString());
+                delayMax = Long.parseLong(exceptions.get(i).getDelayConfigurations().get("delayMax").toString());
+                jitter = Long.parseLong(exceptions.get(i).getDelayConfigurations().get("delayMax").toString());
+                incrementingWaitFactor = (int) exceptions.get(i).getDelayConfigurations().get("incrementingWaitFactor");
+                System.out.println("Max attempts " + (int) exceptions.get(i).getDelayConfigurations().get("maxAttemps"));
+                System.out.println("Delay type " + exceptions.get(i).getDelayConfigurations().get("delayType"));
+                delayDetails.put("maxAttempts", maxAttempts);
+                delayDetails.put("delayType", delayType);
+                delayDetails.put("fixedDelay", fixedDelay);
+                delayDetails.put("delayMin", delayMin);
+                delayDetails.put("delayMax", delayMax);
+                delayDetails.put("jitter", jitter);
+                delayDetails.put("incrementingWaitFactor", incrementingWaitFactor);
+                delayConfigDetails.put(exceptions.get(i).getExceptionType(), delayDetails);
+                //  exceptionFoundInConfig = true;
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,26 +76,42 @@ public class RetryLogic implements IRetryAnalyzer {
                 return false;
 
             } else {
-                exceptions = retryConfigList.getExceptions();
-                System.out.println("Total number of exceptions in configuration " + exceptions.size());
-                for (int i = 0; i <= exceptions.size() - 1; i++) {
-                    System.out.println("Exception type is " + exceptions.get(i).getExceptionType());
-                    if (cause.toString().contains(exceptions.get(i).getExceptionType())) {
-                        maxAttempts = (int) exceptions.get(i).getDelayConfigurations().get("maxAttemps");
-                        delayType = exceptions.get(i).getDelayConfigurations().get("delayType").toString();
-                        fixedDelay = Long.parseLong(exceptions.get(i).getDelayConfigurations().get("fixedDelay").toString());
-                        delayMin = Long.parseLong(exceptions.get(i).getDelayConfigurations().get("delayMin").toString());
-                        delayMax = Long.parseLong(exceptions.get(i).getDelayConfigurations().get("delayMax").toString());
-                        jitter = Long.parseLong(exceptions.get(i).getDelayConfigurations().get("delayMax").toString());
-                        incrementingWaitFactor = (int) exceptions.get(i).getDelayConfigurations().get("incrementingWaitFactor");
-                        System.out.println("Max attempts " + (int) exceptions.get(i).getDelayConfigurations().get("maxAttemps"));
-                        System.out.println("Delay type " + exceptions.get(i).getDelayConfigurations().get("delayType"));
-                        System.out.println("found exception in config ...Breaking for loop ----");
+                for (Map.Entry<String, Map<String, Object>> exceptionEntry : delayConfigDetails.entrySet()) {
+                    System.out.println("For ------------------------------------------------");
+                    String exceptiontype = exceptionEntry.getKey();
+                    if (cause.toString().contains(exceptiontype)) {
+                        System.out.println("Exception found in config");
                         exceptionFoundInConfig = true;
-                        break;
+                        for (Map.Entry<String, Object> delayEntries : exceptionEntry.getValue().entrySet()) {
+                            String key = delayEntries.getKey();
+                            Object value = delayEntries.getValue();
+                            System.out.println("Key-----" + key + "Value -----------" + value);
+                            if (delayEntries.getKey().contains("maxAttempts"))
+                                maxAttempts = (int) delayEntries.getValue();
+                            if (delayEntries.getKey().contains("delayType"))
+                                delayType = delayEntries.getValue().toString();
+                            if (delayEntries.getKey().contains("fixedDelay"))
+                                fixedDelay = (Long) delayEntries.getValue();
+                            if (delayEntries.getKey().contains("delayMin"))
+                                delayMin = (Long) delayEntries.getValue();
+                            if (delayEntries.getKey().contains("delayMax"))
+                                delayMax = (Long) delayEntries.getValue();
+                            if (delayEntries.getKey().contains("jitter"))
+                                jitter = (Long) delayEntries.getValue();
+                            if (delayEntries.getKey().contains("incrementingWaitFactor"))
+                                incrementingWaitFactor = (int) delayEntries.getValue();
+
+                        }
+
 
                     }
+                    if (exceptionFoundInConfig == true)
+                        break;
+
+
                 }
+
+
                 if (exceptionFoundInConfig == true) {
                     if (retryAttempt < maxAttempts) {
                         System.out.println("Executing retry policy");
@@ -87,7 +122,6 @@ public class RetryLogic implements IRetryAnalyzer {
                         retryAttempt++;
                         noOfFailedAttempts++;
                         return true;
-
 
                     }
                 } else {

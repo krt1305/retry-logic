@@ -31,7 +31,7 @@ public class TestRetryLogic {
 
     String urlSlackWebHook = "https://hooks.slack.com/services/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";
 
-    @Test(enabled = true, dataProvider = "countryData")
+    @Test(enabled = false, dataProvider = "countryData")
     public void testAssertionFailureAndCaptureTime(String countryName) {
 
         Instant start = Instant.now();
@@ -96,7 +96,7 @@ public class TestRetryLogic {
     }
 
     @Issue("JRA-9")
-    @Test(enabled = false)
+    @Test(enabled = true)
     public void unknownHostException() throws IOException {
         String hostname = "http://locaihost";
         URL url = new URL(hostname);
