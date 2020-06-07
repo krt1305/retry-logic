@@ -34,31 +34,10 @@ public class testGitHUbConnection {
 
     }
 
-    @Test
-    public void getCommitComments() {
-        String COMMENTS_URL = "/comments";
-        String ISSUES_URL = "issues/";
-        List<String> comments = new ArrayList<>();
-        System.out.println("URL Is " + ISSUE_TRACKER_API_BASE_URL.concat(ISSUES_URL).concat("396").concat(COMMENTS_URL));
-        String comment = null;
-        try {
-            comment = Unirest.get(ISSUE_TRACKER_API_BASE_URL.concat(ISSUES_URL).concat("396").concat(COMMENTS_URL))
-                    .asJson()
-                    .getBody().getArray().get(0).toString();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("Comments are---");
-        System.out.println(comment);
-        for (String s : comments) {
-            System.out.println(s);
-        }
-
-    }
 
     @Test
-    public void test() {
+    public void getIssueComments() {
         RestAssured.baseURI = ISSUE_TRACKER_API_BASE_URL;
         String COMMENTS_URL = "/comments";
         String ISSUES_URL = "issues/";
